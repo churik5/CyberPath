@@ -95,11 +95,12 @@ export function AuthProvider({
       };
     }
 
+    const appUrl = getAppUrl();
     const { data, error } = await client.auth.signUp({
       email,
       password,
       options: {
-        emailRedirectTo: `${getAppUrl()}/dashboard`,
+        ...(appUrl ? { emailRedirectTo: `${appUrl}/dashboard` } : {}),
         data: {
           full_name: name,
         },
