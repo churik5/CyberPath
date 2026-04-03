@@ -117,7 +117,7 @@ export function LandingPage() {
       </section>
 
       {/* How it works */}
-      <section className="section-space border-t border-white/6">
+      <section className="section-space">
         <div className="container-shell">
           <SectionHeading
             eyebrow={locale === "ru" ? "Как это работает" : "How it works"}
@@ -162,7 +162,7 @@ export function LandingPage() {
       </section>
 
       {/* Quiz preview + Features */}
-      <section className="section-space border-t border-white/6">
+      <section className="section-space">
         <div className="container-shell grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
           <FadeIn className="panel rounded-2xl p-7">
             <p className="text-sm font-medium text-sky-400 mb-6">
@@ -269,7 +269,7 @@ export function LandingPage() {
       </section>
 
       {/* Tracks */}
-      <section className="section-space border-t border-white/6">
+      <section className="section-space">
         <div className="container-shell">
           <SectionHeading
             eyebrow="Cybersecurity tracks"
@@ -324,7 +324,7 @@ export function LandingPage() {
       </section>
 
       {/* Dashboard preview */}
-      <section className="section-space border-t border-white/6">
+      <section className="section-space">
         <div className="container-shell grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
           <FadeIn className="space-y-5">
             <SectionHeading
@@ -420,7 +420,7 @@ export function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="section-space border-t border-white/6">
+      <section className="section-space">
         <div className="container-shell">
           <div className="panel rounded-2xl px-8 py-12 text-center">
             <SectionHeading
