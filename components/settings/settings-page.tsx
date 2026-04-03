@@ -1,48 +1,51 @@
 "use client";
 
 import { useLocale } from "@/components/providers/locale-provider";
-import { Badge } from "@/components/ui/badge";
 import { uiDictionary, localeLabels, locales } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
 
 export function SettingsPage() {
   const { locale, setLocale, t } = useLocale();
 
   return (
     <div className="container-shell py-10 lg:py-14">
-      <div className="space-y-8">
-        <section className="panel rounded-[36px] p-8 sm:p-10">
-          <Badge>{t(uiDictionary.common.openSettings)}</Badge>
-          <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+      <div className="max-w-xl space-y-6">
+        <div>
+          <p className="text-sm font-medium text-sky-400 mb-2">
+            {t(uiDictionary.common.openSettings)}
+          </p>
+          <h1 className="text-3xl font-semibold tracking-tight text-white">
             {t(uiDictionary.settings.title)}
           </h1>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+          <p className="mt-2 text-sm text-slate-400">
             {t(uiDictionary.settings.subtitle)}
           </p>
-        </section>
+        </div>
 
-        <section className="panel rounded-[32px] p-6">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-100/70">
+        <div className="panel rounded-2xl p-6">
+          <h2 className="text-base font-semibold text-white mb-1">
             {t(uiDictionary.settings.languageTitle)}
-          </p>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
+          </h2>
+          <p className="text-sm text-slate-400 mb-5">
             {t(uiDictionary.settings.languageDescription)}
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {locales.map((item) => (
               <button
                 key={item}
                 onClick={() => setLocale(item)}
-                className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+                className={cn(
+                  "rounded-xl border px-5 py-2.5 text-sm font-medium transition-all",
                   locale === item
-                    ? "border-cyan-300/28 bg-cyan-300/10 text-white"
-                    : "border-white/10 bg-white/[0.04] text-slate-300"
-                }`}
+                    ? "border-sky-400/25 bg-sky-400/10 text-white"
+                    : "border-white/8 bg-white/4 text-slate-400 hover:border-white/14 hover:text-slate-200",
+                )}
               >
                 {localeLabels[item]}
               </button>
             ))}
           </div>
-        </section>
+        </div>
       </div>
     </div>
   );

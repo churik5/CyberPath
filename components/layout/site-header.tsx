@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { Settings } from "lucide-react";
 
 import { useAuth } from "@/components/providers/auth-provider";
 import { useLocale } from "@/components/providers/locale-provider";
 import { buttonVariants } from "@/components/ui/button";
-import { uiDictionary } from "@/lib/i18n";
+import { locales, localeLabels, uiDictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
-  const { t } = useLocale();
+  const { t, locale, setLocale } = useLocale();
   const { isAuthenticated, signOut } = useAuth();
 
   const navItems = [
@@ -43,8 +44,33 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2 shrink-0">
+          {/* Language switcher */}
+          <div className="hidden sm:flex items-center rounded-lg border border-white/8 bg-white/4 p-0.5">
+            {locales.map((item) => (
+              <button
+                key={item}
+                onClick={() => setLocale(item)}
+                className={cn(
+                  "rounded-md px-2.5 py-1 text-xs font-medium transition-all",
+                  locale === item
+                    ? "bg-white/10 text-white"
+                    : "text-slate-500 hover:text-slate-300",
+                )}
+              >
+                {localeLabels[item]}
+              </button>
+            ))}
+          </div>
+
           {isAuthenticated ? (
             <>
+              <Link
+                href="/settings"
+                className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "hidden sm:inline-flex")}
+                aria-label="Settings"
+              >
+                <Settings className="h-4 w-4" />
+              </Link>
               <Link
                 href="/dashboard"
                 className={buttonVariants({ variant: "ghost", size: "sm" })}
