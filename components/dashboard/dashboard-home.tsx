@@ -7,7 +7,6 @@ import { useAuth } from "@/components/providers/auth-provider";
 import { useLocale } from "@/components/providers/locale-provider";
 import { SectionHeading } from "@/components/layout/section-heading";
 import { TrackIcon } from "@/components/tracks/track-icon";
-import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { sampleMilestones, trackMap } from "@/lib/data/cyberpath";
@@ -29,9 +28,7 @@ export function DashboardHome({ trackSlug }: DashboardHomeProps) {
     const storedResult = window.localStorage.getItem(STORAGE_KEYS.quizResult);
     const storedSaved = window.localStorage.getItem(STORAGE_KEYS.savedTracks);
 
-    const nextResult = storedResult
-      ? (JSON.parse(storedResult) as QuizResult)
-      : null;
+    const nextResult = storedResult ? (JSON.parse(storedResult) as QuizResult) : null;
     const nextSavedTracks = storedSaved
       ? (JSON.parse(storedSaved) as TrackSlug[])
           .map((slug) => trackMap[slug])
@@ -39,13 +36,8 @@ export function DashboardHome({ trackSlug }: DashboardHomeProps) {
       : null;
 
     queueMicrotask(() => {
-      if (nextResult) {
-        setResult(nextResult);
-      }
-
-      if (nextSavedTracks) {
-        setSavedTracks(nextSavedTracks);
-      }
+      if (nextResult) setResult(nextResult);
+      if (nextSavedTracks) setSavedTracks(nextSavedTracks);
     });
   }, []);
 
@@ -54,22 +46,19 @@ export function DashboardHome({ trackSlug }: DashboardHomeProps) {
     (overrideSlug ? trackMap[overrideSlug] : null) ?? result.primaryTrack.track;
   const roadmap = selectedTrack.modules;
   const completedLessons = 4;
-  const totalLessons = roadmap.reduce(
-    (total, module) => total + module.lessons.length,
-    0,
-  );
+  const totalLessons = roadmap.reduce((total, mod) => total + mod.lessons.length, 0);
   const progressPercent = Math.round((completedLessons / totalLessons) * 100);
 
   if (!isAuthenticated) {
     return (
-      <div className="container-shell py-10 lg:py-14">
-        <div className="panel rounded-[36px] p-8 sm:p-10">
+      <div className="container-shell py-12">
+        <div className="panel rounded-2xl p-8 max-w-lg">
           <SectionHeading
             eyebrow={t(uiDictionary.nav.auth)}
             title={t(uiDictionary.dashboard.authGateTitle)}
             description={t(uiDictionary.dashboard.authGateDescription)}
           />
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Link href="/auth?mode=sign-in" className={buttonVariants()}>
               {t(uiDictionary.auth.submitSignIn)}
             </Link>
@@ -81,7 +70,7 @@ export function DashboardHome({ trackSlug }: DashboardHomeProps) {
             </Link>
           </div>
           {!authAvailable ? (
-            <p className="mt-5 text-sm leading-7 text-amber-100/90">
+            <p className="mt-4 text-sm text-amber-300/80">
               {t(uiDictionary.auth.integrationMissing)}
             </p>
           ) : null}
@@ -91,219 +80,198 @@ export function DashboardHome({ trackSlug }: DashboardHomeProps) {
   }
 
   return (
-    <div className="container-shell py-10 lg:py-14">
-      <div className="space-y-8">
-        <section className="panel rounded-[36px] p-8 sm:p-10">
-          <div className="grid gap-8 xl:grid-cols-[1fr_1fr]">
-            <div className="space-y-6">
-              <Badge>{t(uiDictionary.dashboard.badge)}</Badge>
-              <div>
-                <h1 className="text-balance text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                  {t(uiDictionary.dashboard.titlePrefix)}{" "}
-                  <span className="text-gradient">{selectedTrack.name}</span>.
-                </h1>
-                <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                  {t(uiDictionary.dashboard.subtitle)}
-                </p>
-              </div>
+    <div className="container-shell py-10 lg:py-14 space-y-6">
 
-              <div className="grid gap-4 sm:grid-cols-3">
-                {[
-                  { label: t(uiDictionary.dashboard.chosenTrack), value: selectedTrack.name },
-                  { label: t(uiDictionary.dashboard.progress), value: `${progressPercent}%` },
-                  { label: t(uiDictionary.dashboard.quizzesCompleted), value: "1" },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="rounded-[24px] border border-white/8 bg-white/[0.04] px-5 py-4"
-                  >
-                    <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
-                      {item.label}
-                    </p>
-                    <p className="mt-3 text-lg font-semibold text-white">
-                      {item.value}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="panel rounded-[32px] p-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-100/70">
-                {t(uiDictionary.dashboard.pathOverview)}
-              </p>
-              <div className="mt-6 flex items-center gap-4">
-                <span
-                  className="flex h-14 w-14 items-center justify-center rounded-2xl"
-                  style={{
-                    backgroundColor: `${selectedTrack.accent}18`,
-                    color: selectedTrack.accent,
-                  }}
-                >
-                  <TrackIcon icon={selectedTrack.icon} />
-                </span>
-                <div>
-                  <p className="text-xl font-semibold text-white">
-                    {selectedTrack.name}
-                  </p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    {selectedTrack.difficulty}
-                  </p>
-                </div>
-              </div>
-              <div className="mt-6 space-y-3">
-                <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span>{t(uiDictionary.dashboard.roadmapCompletion)}</span>
-                  <span>{progressPercent}%</span>
-                </div>
-                <Progress value={progressPercent} />
-              </div>
-              <p className="mt-6 text-sm leading-7 text-slate-300">
-                {selectedTrack.shortDescription}
-              </p>
-            </div>
+      {/* Top: track overview */}
+      <div className="panel rounded-2xl p-6 sm:p-8">
+        <div className="grid gap-6 xl:grid-cols-[1fr_auto]">
+          <div className="space-y-4">
+            <p className="text-sm font-medium text-sky-400">
+              {t(uiDictionary.dashboard.badge)}
+            </p>
+            <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              {t(uiDictionary.dashboard.titlePrefix)}{" "}
+              <span className="text-gradient">{selectedTrack.name}</span>.
+            </h1>
+            <p className="text-base text-slate-400">
+              {t(uiDictionary.dashboard.subtitle)}
+            </p>
           </div>
-        </section>
 
-        <section className="grid gap-8 xl:grid-cols-[1.08fr_0.92fr]">
-          <div className="space-y-6">
-            <SectionHeading
-              eyebrow={t(uiDictionary.dashboard.modules)}
-              title={t(uiDictionary.dashboard.modulesTitle)}
-              description={t(uiDictionary.dashboard.modulesDescription)}
-            />
+          <div className="flex flex-wrap gap-4 xl:flex-col xl:items-end xl:justify-center">
+            {[
+              { label: t(uiDictionary.dashboard.chosenTrack), value: selectedTrack.name },
+              { label: t(uiDictionary.dashboard.progress), value: `${progressPercent}%` },
+              { label: t(uiDictionary.dashboard.quizzesCompleted), value: "1" },
+            ].map((item) => (
+              <div
+                key={item.label}
+                className="rounded-xl border border-white/6 bg-white/4 px-4 py-3 min-w-[120px]"
+              >
+                <p className="text-xs text-slate-500">{item.label}</p>
+                <p className="mt-1 text-lg font-semibold text-white">{item.value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
-            <div className="grid gap-5">
-              {roadmap.map((module, moduleIndex) => (
-                <div key={module.id} className="panel rounded-[30px] p-6">
-                  <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-slate-400">
-                        {`Module ${moduleIndex + 1}`}
-                      </p>
-                      <h2 className="mt-2 text-2xl font-semibold text-white">
-                        {module.title}
-                      </h2>
-                      <p className="mt-3 text-sm leading-7 text-slate-300">
-                        {module.summary}
-                      </p>
+        <div className="mt-6 flex items-center gap-4 rounded-xl border border-white/6 bg-white/3 p-4">
+          <span
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
+            style={{
+              backgroundColor: `${selectedTrack.accent}15`,
+              color: selectedTrack.accent,
+            }}
+          >
+            <TrackIcon icon={selectedTrack.icon} />
+          </span>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-4 mb-2">
+              <p className="text-base font-semibold text-white truncate">
+                {selectedTrack.name}
+              </p>
+              <span className="text-sm text-slate-400 shrink-0">{progressPercent}%</span>
+            </div>
+            <Progress value={progressPercent} />
+          </div>
+        </div>
+      </div>
+
+      {/* Main: modules + sidebar */}
+      <div className="grid gap-6 xl:grid-cols-[1fr_300px]">
+
+        {/* Modules */}
+        <div className="space-y-4">
+          <p className="text-sm font-medium text-slate-400">
+            {t(uiDictionary.dashboard.modules)}
+          </p>
+          {roadmap.map((module, moduleIndex) => (
+            <div key={module.id} className="panel rounded-2xl p-5">
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div>
+                  <p className="text-xs text-slate-500 mb-1">Module {moduleIndex + 1}</p>
+                  <h2 className="text-lg font-semibold text-white">{module.title}</h2>
+                  <p className="mt-1 text-sm text-slate-400">{module.summary}</p>
+                </div>
+                <span
+                  className={`shrink-0 rounded-lg border px-3 py-1 text-xs font-medium ${
+                    moduleIndex === 0
+                      ? "border-sky-400/20 bg-sky-400/8 text-sky-300"
+                      : moduleIndex === 1
+                        ? "border-white/8 bg-white/4 text-slate-300"
+                        : "border-white/6 bg-white/3 text-slate-500"
+                  }`}
+                >
+                  {moduleIndex === 0 ? "Active" : moduleIndex === 1 ? "Next" : "Locked"}
+                </span>
+              </div>
+
+              <div className="grid gap-2">
+                {module.lessons.map((lesson, lessonIndex) => {
+                  const complete = moduleIndex === 0 && lessonIndex < 2;
+                  const inProgress = moduleIndex === 0 && lessonIndex === 2;
+
+                  return (
+                    <div
+                      key={lesson.title}
+                      className="flex items-center justify-between gap-4 rounded-xl border border-white/6 bg-white/3 px-4 py-3"
+                    >
+                      <div>
+                        <p className="text-sm font-medium text-white">{lesson.title}</p>
+                        <p className="mt-0.5 text-xs text-slate-500">{lesson.duration}</p>
+                      </div>
+                      <span
+                        className={`text-xs shrink-0 ${
+                          complete
+                            ? "text-emerald-400"
+                            : inProgress
+                              ? "text-sky-400"
+                              : "text-slate-600"
+                        }`}
+                      >
+                        {complete ? "Done" : inProgress ? "In progress" : "Up next"}
+                      </span>
                     </div>
-                    <div className="rounded-full border border-white/8 bg-white/[0.04] px-4 py-2 text-xs uppercase tracking-[0.24em] text-slate-300">
-                      {moduleIndex === 0
-                        ? "Active now"
-                        : moduleIndex === 1
-                          ? "Queued next"
-                          : "Locked"}
-                    </div>
-                  </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
 
-                  <div className="mt-6 grid gap-3">
-                    {module.lessons.map((lesson, lessonIndex) => {
-                      const complete = moduleIndex === 0 && lessonIndex < 2;
-                      const inProgress = moduleIndex === 0 && lessonIndex === 2;
-
-                      return (
-                        <div
-                          key={lesson.title}
-                          className="rounded-[22px] border border-white/8 bg-white/[0.04] px-4 py-4"
-                        >
-                          <div className="flex items-center justify-between gap-4">
-                            <div>
-                              <p className="text-sm font-medium text-white">
-                                {lesson.title}
-                              </p>
-                              <p className="mt-2 text-xs uppercase tracking-[0.24em] text-slate-400">
-                                {lesson.duration}
-                              </p>
-                            </div>
-                            <div className="text-sm text-slate-300">
-                              {complete
-                                ? "Completed"
-                                : inProgress
-                                  ? "In progress"
-                                  : "Up next"}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+        {/* Sidebar */}
+        <div className="space-y-4">
+          {/* Milestones */}
+          <div className="panel rounded-2xl p-5">
+            <p className="text-sm font-medium text-slate-300 mb-4">
+              {t(uiDictionary.dashboard.milestones)}
+            </p>
+            <div className="grid gap-2">
+              {sampleMilestones.map((milestone, index) => (
+                <div
+                  key={milestone}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-white/6 bg-white/3 px-3 py-3"
+                >
+                  <p className="text-sm text-white">{milestone}</p>
+                  <span className={`text-xs shrink-0 ${index < 2 ? "text-emerald-400" : "text-slate-600"}`}>
+                    {index < 2 ? "✓" : "–"}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className="panel rounded-[32px] p-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-100/70">
-                {t(uiDictionary.dashboard.milestones)}
-              </p>
-              <div className="mt-5 grid gap-3">
-                {sampleMilestones.map((milestone, index) => (
-                  <div
-                    key={milestone}
-                    className="rounded-[22px] border border-white/8 bg-white/[0.04] px-4 py-4"
+          {/* Saved tracks */}
+          <div className="panel rounded-2xl p-5">
+            <p className="text-sm font-medium text-slate-300 mb-4">
+              {t(uiDictionary.dashboard.savedTracks)}
+            </p>
+            <div className="grid gap-2">
+              {(savedTracks.length
+                ? savedTracks
+                : result.rankedTracks.slice(1, 3).map((item) => item.track)
+              ).map((track) => (
+                <Link
+                  key={track.slug}
+                  href={`/tracks/${track.slug}`}
+                  className="flex items-center gap-3 rounded-xl border border-white/6 bg-white/3 px-3 py-3 transition-colors hover:border-white/12"
+                >
+                  <span
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+                    style={{
+                      backgroundColor: `${track.accent}15`,
+                      color: track.accent,
+                    }}
                   >
-                    <p className="text-sm font-medium text-white">{milestone}</p>
-                    <p className="mt-2 text-sm text-slate-400">
-                      {index < 2 ? "Unlocked" : "On deck"}
-                    </p>
+                    <TrackIcon icon={track.icon} className="h-4 w-4" />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-white truncate">{track.name}</p>
+                    <p className="text-xs text-slate-500">{track.category}</p>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="panel rounded-[32px] p-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-100/70">
-                {t(uiDictionary.dashboard.savedTracks)}
-              </p>
-              <div className="mt-5 grid gap-3">
-                {(savedTracks.length ? savedTracks : result.rankedTracks.slice(1, 3).map((item) => item.track)).map((track) => (
-                  <Link
-                    key={track.slug}
-                    href={`/tracks/${track.slug}`}
-                    className="rounded-[22px] border border-white/8 bg-white/[0.04] px-4 py-4 transition-colors hover:border-white/14"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className="flex h-10 w-10 items-center justify-center rounded-xl"
-                        style={{
-                          backgroundColor: `${track.accent}18`,
-                          color: track.accent,
-                        }}
-                      >
-                        <TrackIcon icon={track.icon} className="h-4 w-4" />
-                      </span>
-                      <div>
-                        <p className="text-sm font-medium text-white">{track.name}</p>
-                        <p className="mt-1 text-sm text-slate-400">
-                          {track.category}
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div className="panel rounded-[32px] p-6">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-cyan-100/70">
-                {t(uiDictionary.dashboard.nextAction)}
-              </p>
-              <p className="mt-4 text-sm leading-7 text-slate-300">
-                {t(uiDictionary.dashboard.nextActionDescription)}
-              </p>
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <Link href="/results" className={buttonVariants({ variant: "outline" })}>
-                  {t(uiDictionary.dashboard.reviewResults)}
                 </Link>
-                <Link href="/tracks" className={buttonVariants()}>
-                  {t(uiDictionary.dashboard.compareTracks)}
-                </Link>
-              </div>
+              ))}
             </div>
           </div>
-        </section>
+
+          {/* Next action */}
+          <div className="panel rounded-2xl p-5">
+            <p className="text-sm font-medium text-slate-300 mb-2">
+              {t(uiDictionary.dashboard.nextAction)}
+            </p>
+            <p className="text-sm text-slate-400 leading-6 mb-4">
+              {t(uiDictionary.dashboard.nextActionDescription)}
+            </p>
+            <div className="grid gap-2">
+              <Link href="/results" className={buttonVariants({ variant: "outline", size: "sm" })}>
+                {t(uiDictionary.dashboard.reviewResults)}
+              </Link>
+              <Link href="/tracks" className={buttonVariants({ size: "sm" })}>
+                {t(uiDictionary.dashboard.compareTracks)}
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

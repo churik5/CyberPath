@@ -9,12 +9,12 @@ export function Progress({ value, className }: ProgressProps) {
   return (
     <div
       className={cn(
-        "h-2 overflow-hidden rounded-full bg-white/8 shadow-inner shadow-black/20",
+        "h-1.5 overflow-hidden rounded-full bg-white/8",
         className,
       )}
     >
       <div
-        className="h-full rounded-full bg-[linear-gradient(90deg,#52e5ff,#7b8cff)] transition-all duration-300"
+        className="h-full rounded-full bg-[linear-gradient(90deg,#38bdf8,#818cf8)] transition-all duration-300"
         style={{ width: `${Math.max(0, Math.min(100, value))}%` }}
       />
     </div>

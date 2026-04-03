@@ -1,12 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #040816;
-  --foreground: #f8fbff;
-  --muted: #94a3b8;
-  --border: rgba(148, 163, 184, 0.14);
-  --panel: rgba(10, 16, 30, 0.78);
-  --panel-strong: rgba(8, 11, 24, 0.92);
+  --background: #060818;
+  --foreground: #eef4ff;
+  --muted: #8898b0;
+  --border: rgba(255, 255, 255, 0.09);
+  --panel: rgba(11, 15, 30, 0.92);
   --font-sans: "Avenir Next", "Segoe UI Variable Display", "SF Pro Display",
     "IBM Plex Sans", "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", "SF Mono",
@@ -36,23 +35,9 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   background-image:
-    radial-gradient(circle at 20% 20%, rgba(82, 229, 255, 0.18), transparent 28%),
-    radial-gradient(circle at 80% 14%, rgba(123, 140, 255, 0.16), transparent 24%),
-    radial-gradient(circle at 50% 100%, rgba(34, 197, 94, 0.06), transparent 26%),
-    linear-gradient(180deg, #050917 0%, #03060f 100%);
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(circle at center, black, transparent 82%);
-  opacity: 0.55;
+    radial-gradient(ellipse at 12% 8%, rgba(56, 189, 248, 0.09), transparent 38%),
+    radial-gradient(ellipse at 88% 6%, rgba(129, 140, 248, 0.08), transparent 34%),
+    linear-gradient(180deg, #07091e 0%, #04060e 100%);
 }
 
 a {
@@ -61,7 +46,7 @@ a {
 }
 
 ::selection {
-  background: rgba(82, 229, 255, 0.26);
+  background: rgba(56, 189, 248, 0.20);
   color: white;
 }
 
@@ -81,25 +66,23 @@ a {
 }
 
 .panel {
-  background:
-    linear-gradient(180deg, rgba(15, 22, 40, 0.82), rgba(7, 10, 22, 0.78)),
-    rgba(255, 255, 255, 0.03);
+  background: rgba(11, 15, 30, 0.90);
   border: 1px solid var(--border);
   box-shadow:
-    0 28px 80px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(18px);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 16px 48px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(14px);
 }
 
 .hero-orb {
   background:
-    radial-gradient(circle at center, rgba(82, 229, 255, 0.24), transparent 38%),
-    radial-gradient(circle at center, rgba(123, 140, 255, 0.14), transparent 58%),
-    linear-gradient(180deg, rgba(10, 17, 32, 0.9), rgba(5, 9, 20, 0.58));
-  border: 1px solid rgba(82, 229, 255, 0.14);
+    radial-gradient(circle at center, rgba(56, 189, 248, 0.18), transparent 40%),
+    radial-gradient(circle at center, rgba(129, 140, 248, 0.12), transparent 60%),
+    linear-gradient(180deg, rgba(10, 17, 32, 0.88), rgba(5, 9, 20, 0.55));
+  border: 1px solid rgba(56, 189, 248, 0.12);
   box-shadow:
-    0 0 160px rgba(82, 229, 255, 0.15),
-    inset 0 0 90px rgba(123, 140, 255, 0.12);
+    0 0 140px rgba(56, 189, 248, 0.12),
+    inset 0 0 80px rgba(129, 140, 248, 0.10);
 }
 
 .orbit-node {
@@ -108,7 +91,7 @@ a {
 }
 
 .text-gradient {
-  background: linear-gradient(90deg, #ffffff 0%, #9de8ff 46%, #94a0ff 100%);
+  background: linear-gradient(90deg, #7dd3fc 0%, #a5b4fc 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -123,7 +106,7 @@ a {
 }
 
 input::placeholder {
-  color: rgba(148, 163, 184, 0.78);
+  color: rgba(136, 152, 170, 0.65);
 }
 
 button,
